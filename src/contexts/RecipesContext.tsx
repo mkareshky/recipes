@@ -1,6 +1,5 @@
 import { createContext, FormEvent, ReactNode, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Dispatch } from "react";
 
 interface ChildrenType {
     children: ReactNode;
@@ -17,62 +16,54 @@ export interface Recipe {
     id: string;
 }
 
-interface GlobalContextType {
-    searchParam: string;
+interface RecipesContextType {
     loading: boolean;
     recipeList: Recipe[];
-    setSearchParam: Dispatch<string>;
-    handleSubmit: (event: FormEvent) => Promise<void>;
+    handleSubmit: (event: FormEvent, search: string) => Promise<void>;
+    errorMsg: string;
 }
 
-const defaultGlobalContext: GlobalContextType = {
-    searchParam: "",
+const defaultRecipesContext: RecipesContextType = {
     loading: false,
     recipeList: [],
-    setSearchParam: () => { },
     handleSubmit: async () => { },
+    errorMsg: ''
 };
 
-export const RecipesContext = createContext<GlobalContextType>(defaultGlobalContext);
+export const RecipesContext = createContext<RecipesContextType>(defaultRecipesContext);
 
 const RecipesProvide = ({ children }: ChildrenType) => {
-    const [searchParam, setSearchParam] = useState("");
     const [loading, setLoading] = useState(false);
     const [recipeList, setRecipeList] = useState<Recipe[]>([]);
+    const [errorMsg, setErrprMsg] = useState('');
 
     const navigate = useNavigate()
 
 
 
-    async function handleSubmit(event: FormEvent) {
+    async function handleSubmit(event: FormEvent, search: string) {
         event.preventDefault();
+        setLoading(true);
         try {
-            const res = await fetch(
-                `https://forkify-api.herokuapp.com/api/v2/recipes?search=${searchParam}`
-            );
-
-            const data = await res.json();
-            if (data?.data?.recipes) {
-                setRecipeList(data?.data?.recipes);
-                setLoading(false);
-                setSearchParam("");
-                navigate('/')
-            }
-        } catch (e) {
-            console.log(e);
+            const res = await fetch(`https://forkify-api.herokuapp.com/api/v2/recipes?search=${search}`);
+            if (!res.ok) setErrprMsg(`HTTP Error Status: ${res.status}`);
+            const resJson = await res.json();
+            setRecipeList(resJson?.data?.recipes);
+            navigate('/');
+        } catch (error) {
+            (error instanceof Error) ? setErrprMsg(error.message) : 'Unknown Error...';
+        } finally {
             setLoading(false);
-            setSearchParam("");
         }
     }
 
     return (
         <RecipesContext.Provider
             value={{
-                searchParam,
                 loading,
                 recipeList,
-                setSearchParam,
                 handleSubmit,
+                errorMsg
             }}
         >
             {children}

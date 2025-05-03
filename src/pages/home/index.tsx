@@ -3,9 +3,10 @@ import RecipeItem from "../../components/recipesItem";
 import { RecipesContext } from "../../contexts/RecipesContext";
 
 const Home = () => {
-    const { recipeList, loading } = useContext(RecipesContext);
+    const { recipeList, loading, errorMsg } = useContext(RecipesContext);
 
     if (loading) return <div>Loading...Please wait!</div>;
+    if (errorMsg) return <div>{errorMsg}</div>;
 
     return (
         <div className="py-8 container mx-auto flex flex-wrap justify-center gap-10">
