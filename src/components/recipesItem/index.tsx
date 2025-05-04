@@ -1,6 +1,9 @@
+import { Link } from "react-router-dom";
 import { Recipe } from "../../contexts/RecipesContext";
 
 const RecipeItem = ({ item }: { item: Recipe }) => {
+
+
     return (
         <div className="flex flex-col w-80 overflow-hidden p-5 bg-white/75 shadow-xl gap-5 border-2 rounded-2xl border-white">
             <div className="h-40 flex justify-center overflow-hidden items-center rounded-xl">
@@ -13,6 +16,12 @@ const RecipeItem = ({ item }: { item: Recipe }) => {
                 <h3 className="font-bold text-2xl truncate text-black">
                     {item?.title}
                 </h3>
+                <Link
+                    to={`/recipe-item/${item?.id}`}
+                    className="text-sm p-3 mt-5 px-8 rounded-lg uppercase font-medium tracking-wider inline-block shadow-md bg-black text-white"
+                >
+                    Recipe Details
+                </Link>
             </div>
         </div>
     );

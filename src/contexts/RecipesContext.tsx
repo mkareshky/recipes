@@ -1,27 +1,6 @@
-import { createContext, FormEvent, ReactNode, useState } from "react";
+import { createContext, FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-interface ChildrenType {
-    children: ReactNode;
-}
-
-export interface Data {
-    recipes: Recipe[];
-}
-
-export interface Recipe {
-    publisher: string;
-    image_url: string;
-    title: string;
-    id: string;
-}
-
-interface RecipesContextType {
-    loading: boolean;
-    recipeList: Recipe[];
-    handleSubmit: (event: FormEvent, search: string) => Promise<void>;
-    errorMsg: string;
-}
+import { ChildrenType, Recipe, RecipesContextType } from "../types";
 
 const defaultRecipesContext: RecipesContextType = {
     loading: false,
@@ -38,8 +17,6 @@ const RecipesProvide = ({ children }: ChildrenType) => {
     const [errorMsg, setErrprMsg] = useState('');
 
     const navigate = useNavigate()
-
-
 
     async function handleSubmit(event: FormEvent, search: string) {
         event.preventDefault();
