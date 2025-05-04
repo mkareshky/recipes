@@ -10,23 +10,48 @@ const RecipeDetails = () => {
     if (errorMsg) return <p className="text-red-600">Error: {errorMsg}</p>;
 
     return (
-        <>
-            {
-                data && <>
-                    <div className="h-40 flex justify-center overflow-hidden items-center rounded-xl">
-                        <img src={data.recipe.image_url} alt={data.recipe.title} className="block w-full" />
-                    </div>
-                    <div>
-                        <span className="text-sm text-cyan-700 font-medium">
-                            {data.recipe.publisher}
-                        </span>
-                        <h3 className="font-bold text-2xl truncate text-black">
-                            {data.recipe.title}
-                        </h3>
-                    </div>
-                </>
-            }
-        </>
+        <div className="container mx-auto py-10 grid grid-cols-1 lg:grid-cols-2 gap-10">
+            <div className="row-start-2 lg:row-start-auto">
+                <div className="h-96 overflow-hidden rounded-xl group">
+                    <img
+                        src={data?.recipe.image_url}
+                        className="w-full h-full object-cover block group-hover:scale-105 duration-300"
+                    />
+                </div>
+            </div>
+            <div className="flex flex-col gap-3">
+                <span className="text-sm text-cyan-700 font-medium">
+                    {data?.recipe.publisher}
+                </span>
+                <h3 className="font-bold text-2xl truncate text-black">
+                    {data?.recipe.title}
+                </h3>
+                <div>
+                    <button
+                        className="p-3 px-8 rounded-lg text-sm uppercase font-medium tracking-wider mt-3 inline-block shadow-md bg-black text-white"
+                    >
+                        {"Add to favorites"}
+                    </button>
+                </div>
+                <div>
+                    <span className="text-2xl font-semibold text-black">
+                        Ingredients:
+                    </span>
+                    <ul className="flex flex-col gap-3">
+                        {data?.recipe.ingredients.map((ingredient) => (
+                            <li>
+                                <span className="text-2xl font-semibold text-black">
+                                    {ingredient.quantity} {ingredient.unit}
+                                </span>
+                                <span className="text-2xl font-semibold text-black">
+                                    {ingredient.description}
+                                </span>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            </div>
+        </div>
     );
 }
 
