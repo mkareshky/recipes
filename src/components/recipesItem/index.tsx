@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Recipe } from "../../contexts/RecipesContext";
+import { Recipe } from "../../types";
 
 const RecipeItem = ({ item }: { item: Recipe }) => {
 
